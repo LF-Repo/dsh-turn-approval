@@ -1,5 +1,7 @@
 # dsh-turn-approval · Task-Scoped Approval
 
+[![awesome · DSH plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
+
 [中文](README.md) | English
 
 Some high-risk actions deserve your explicit approval. Repeating that approval for the same task should not be necessary.

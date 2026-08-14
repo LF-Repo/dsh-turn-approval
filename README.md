@@ -1,5 +1,7 @@
 # dsh-turn-approval · 任务级授权
 
+[![awesome · DSH plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
+
 中文 | [English](README.en.md)
 
 有些高风险操作值得你亲自点头，但同一个任务里，不该让你为同一件事反复点头。
