@@ -1,0 +1,7 @@
+# dsh-turn-approval bundle patch
+#
+# 官方 bundle 层：profile 列出本包（dsh.profile.bundles）时自动应用，
+# 以包名插入插件行（Node 解析已安装的包代码）。
+- insert:
+    - id: turn-approval
+      name: 'dsh-turn-approval'
