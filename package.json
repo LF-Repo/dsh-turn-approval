@@ -1,7 +1,7 @@
 {
   "name": "dsh-turn-approval",
   "description": "Codex-style \"Allow for this task\": turn-scoped, in-memory danger-full-access grants for DeepSeek Harness approvals. Ephemeral by design — nothing is persisted; grants die at turn/end, session/agent dispose, or restart. Client half shadows the official approval card via the conversation.composer slot — zero official-bundle changes.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arrow949/dsh-turn-approval.git"
@@ -28,10 +28,11 @@
     "client": {
       "platform": "web",
       "inject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-primitives",
         "@deepseek-ai/dsh-client-ui-conversation"
+      ],
+      "external": [
+        "@deepseek-ai/dsh-client-ui-approval"
       ]
     }
   },
@@ -39,10 +40,10 @@
     "test": "node --test"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "^4.0.1"
+    "@deepseek-ai/cordis": "^4.0.0"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "^4.0.1"
+    "@deepseek-ai/cordis": "^4.0.0"
   },
   "license": "MIT"
 }

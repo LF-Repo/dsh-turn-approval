@@ -73,18 +73,21 @@ Uninstalling removes both the Node and client halves. The approval card automati
 - **Task scoped**: a grant is bound to `session + turn`; it never turns an entire session into full access.
 - **No cross-session grants**: a grant in one session cannot affect another. Subagents use distinct sessions and do not inherit it.
 - **Type isolated**: only matching `danger-full-access` escalations are automatically allowed. `workspace-write` and other approvals still prompt individually.
-- **User initiated**: only the approval-card action can create a grant; the model has no self-service task-grant route.
+- **User initiated**: only the approval-card action can create a grant; the model has no self-service task-grant route. The grant binds to a host-minted `randomUUID()` approval id that the model cannot read or forge, and one approval can open at most one grant.
+- **Endpoint authenticated**: `/api/turn-approval/grant` first passes the official `connection` auth fence (trusted local origin, same-origin, and a cookie signed by this process's secret) or it is rejected.
 - **Auditable**: automatically allowed requests retain their approval event records.
 
 After **Allow for this task** is selected, the plugin first asks the host to create the task grant. If that endpoint returns a non-2xx response or the request fails, the card clearly reports the failure and remains retryable. It does not pretend the grant succeeded or silently downgrade to **Allow once**.
 
 ## Implementation and compatibility
 
-This is an official DSH bundle: `package.json` declares `dsh.bundle.patch`, and `cordis.patch.yml` adds the plugin to a profile. Its client half renders through the official `conversation.composer` chain slot at higher priority; it **does not modify any official DSH bundle file**, and uninstalling restores the standard UI.
+This is an official DSH bundle: `package.json` declares `dsh.bundle.patch`, and `cordis.patch.yml` adds the plugin to a profile. Its client half takes over rendering of the approval card through the official `conversation.composer` chain slot at priority `-1` (ahead of the official card's `1`); it **does not modify any official DSH bundle file**, and uninstalling restores the standard UI.
 
-The current appearance reuses internal CSS class names from DSH's ApprovalPanel. If DSH changes that component structure or its CSS-module class names, this plugin may need a compatibility release. This is adaptation to DSH internals, not modification of official files.
+The card ships its own styles (its own class names plus its own `<style>` element) and borrows only official theme tokens, so official restyling or class renames do not affect this plugin.
 
-Web only: headless profiles have no UI entry point, so the task-grant endpoint is not registered there.
+⚠️ **Compatibility boundary** (check this when upgrading DSH): this plugin relies on several **non-exported** internal shapes — structural detection of the pending approval interaction, reading the `id` of `approval/asked` from the session event window, and a tool-call node walk for the command line. These are stable behavior but not public API. If they break on upgrade the symptom is a **silent fall back to the official card** (this plugin stops taking over) without any broken approvals; a render fault instead shows that slot's error placeholder. Update the plugin in that case.
+
+Web only: headless profiles have no UI entry point, so the task-grant endpoint is not registered there. The Node half still activates safely there — only the entry point is absent.
 
 ## Instructions for AI agents
 
